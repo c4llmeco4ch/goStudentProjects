@@ -2,20 +2,21 @@ package main
 
 import(
 	"fmt"
-	"rand"
+	"math/rand"
 	"os"
+	"strconv"
 )
 
 var(
 	nums []int  //The slice of numbers we want to sort
-	numVals int //The number of numbers we want to sort
+	numVals int = -1
 )
 
 //User can optionally add a parameter that determines how many random numbers will be sorted
 //If none are provided, 100 will be used
 func main(){
 	if len(os.Args) >= 2 {
-		numVals = os.Args[1]
+		numVals, _ = strconv.Atoi(os.Args[1])
 	} else{
 		numVals = 100
 	}
@@ -27,7 +28,7 @@ func main(){
 }
 
 func initSlice() []int {
-	vals := [numVals]int{}
+	vals := []int{}
 	for i := 0; i < numVals; i++ {
 		vals = append(vals, rand.Int())
 	}
@@ -39,24 +40,29 @@ func mergeSort(arr []int) []int {
 		return arr
 	}
 
-	left = mergeSort(arr[:len(arr) / 2])
-	right = mergeSort(arr[len(arr) / 2:])
-
-	sortArr := [len(arr)]int{}
+	left := mergeSort(arr[:len(arr) / 2])
+	right := mergeSort(arr[len(arr) / 2:])
+	sortArr := []int{}
 	lIndex, rIndex := 0, 0
-	for lIndex < len(left) && rIndex < right {
+	for lIndex < len(left) && rIndex < len(right) {
 		leftLeast := left[lIndex] <= right[rIndex]
 		if leftLeast {
-			sortArr = append(sortArr, left[lIndex++])
+			sortArr = append(sortArr, left[lIndex])
+			lIndex++
 		} else{
-			sortArr = append(sortArr, right[rIndex++])
+			sortArr = append(sortArr, right[rIndex])
+			rIndex++
 		}
 	}
 	if lIndex < len(left) {
-		sortArr = append(sortArr, left[lIndex:])
+		for ; lIndex < len(left); lIndex++ {
+			sortArr = append(sortArr, left[lIndex])
+		}
 	}
 	if rIndex < len(right) {
-		sortArr = append(sortArr, right[rIndex:])
+		for ; rIndex < len(right); rIndex++ {
+			sortArr = append(sortArr, right[rIndex])
+		}
 	}
 	return sortArr
 }
