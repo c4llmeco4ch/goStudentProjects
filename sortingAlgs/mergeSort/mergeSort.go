@@ -1,23 +1,24 @@
 package main
 
-import(
+import (
 	"fmt"
 	"math/rand"
 	"os"
 	"strconv"
+	"time"
 )
 
-var(
-	nums []int  //The slice of numbers we want to sort
-	numVals int = -1
+var (
+	nums    []int //The slice of numbers we want to sort
+	numVals int   = -1
 )
 
 //User can optionally add a parameter that determines how many random numbers will be sorted
 //If none are provided, 100 will be used
-func main(){
+func main() {
 	if len(os.Args) >= 2 {
 		numVals, _ = strconv.Atoi(os.Args[1])
-	} else{
+	} else {
 		numVals = 100
 	}
 	nums = initSlice()
@@ -28,6 +29,7 @@ func main(){
 }
 
 func initSlice() []int {
+	rand.Seed(int64(time.Now().Nanosecond()))
 	vals := []int{}
 	for i := 0; i < numVals; i++ {
 		vals = append(vals, rand.Int())
@@ -40,8 +42,8 @@ func mergeSort(arr []int) []int {
 		return arr
 	}
 
-	left := mergeSort(arr[:len(arr) / 2])
-	right := mergeSort(arr[len(arr) / 2:])
+	left := mergeSort(arr[:len(arr)/2])
+	right := mergeSort(arr[len(arr)/2:])
 	sortArr := []int{}
 	lIndex, rIndex := 0, 0
 	for lIndex < len(left) && rIndex < len(right) {
@@ -49,7 +51,7 @@ func mergeSort(arr []int) []int {
 		if leftLeast {
 			sortArr = append(sortArr, left[lIndex])
 			lIndex++
-		} else{
+		} else {
 			sortArr = append(sortArr, right[rIndex])
 			rIndex++
 		}

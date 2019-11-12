@@ -6,6 +6,7 @@ import (
 	"math/rand"
 	"os"
 	"strconv"
+	"time"
 )
 
 var (
@@ -62,6 +63,7 @@ func rearrange(input []int, digits [10]int, place int) []int {
 }
 
 func initSlice() []int {
+	rand.Seed(int64(time.Now().Nanosecond()))
 	vals := []int{}
 	for i := 0; i < values; i++ {
 		vals = append(vals, rand.Int())
