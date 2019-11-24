@@ -1,16 +1,15 @@
 package main
 
 import (
+	"crypto/rand"
 	"fmt"
-	"math/rand"
 	"os"
 	"strconv"
-	"time"
 )
 
 var (
-	nums    []int //The slice of numbers we want to sort
-	numVals int   = -1
+	nums    []byte //The slice of numbers we want to sort
+	numVals int    = -1
 )
 
 //User can optionally add a parameter that determines how many random numbers will be sorted
@@ -28,42 +27,42 @@ func main() {
 	}
 }
 
-func initSlice() []int {
-	rand.Seed(int64(time.Now().Nanosecond()))
-	vals := []int{}
-	for i := 0; i < numVals; i++ {
-		vals = append(vals, rand.Int())
+func initSlice() []byte {
+	vals := make([]byte, numVals)
+	_, err := rand.Read(vals)
+	if err != nil {
+		panic(err)
 	}
 	return vals
 }
 
-func mergeSort(arr []int) []int {
+func mergeSort(arr []byte) []byte {
 	if len(arr) <= 1 { //base case
 		return arr
 	}
 
 	left := mergeSort(arr[:len(arr)/2])
 	right := mergeSort(arr[len(arr)/2:])
-	sortArr := []int{}
+	sortArr := make([]byte, len(arr))
 	lIndex, rIndex := 0, 0
 	for lIndex < len(left) && rIndex < len(right) {
 		leftLeast := left[lIndex] <= right[rIndex]
 		if leftLeast {
-			sortArr = append(sortArr, left[lIndex])
+			sortArr[lIndex+rIndex] = left[lIndex]
 			lIndex++
 		} else {
-			sortArr = append(sortArr, right[rIndex])
+			sortArr[lIndex+rIndex] = right[rIndex]
 			rIndex++
 		}
 	}
 	if lIndex < len(left) {
 		for ; lIndex < len(left); lIndex++ {
-			sortArr = append(sortArr, left[lIndex])
+			sortArr[lIndex+rIndex] = left[lIndex]
 		}
 	}
 	if rIndex < len(right) {
 		for ; rIndex < len(right); rIndex++ {
-			sortArr = append(sortArr, right[rIndex])
+			sortArr[lIndex+rIndex] = right[rIndex]
 		}
 	}
 	return sortArr

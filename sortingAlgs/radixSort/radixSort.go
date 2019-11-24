@@ -1,12 +1,12 @@
 package main
 
 import (
+	"crypto/rand"
 	"fmt"
 	"math"
-	"math/rand"
+	"math/big"
 	"os"
 	"strconv"
-	"time"
 )
 
 var (
@@ -21,8 +21,8 @@ func main() {
 		values = 100
 	}
 	nums = initSlice()
-	place := 1
-	maxVal := maxInt(nums)
+	var place int = 1
+	maxVal := maxByte(nums)
 	for maxVal/place >= 1 {
 		nums = radixSort(nums, place)
 		place *= 10
@@ -30,8 +30,8 @@ func main() {
 	printSlice(nums)
 }
 
-func maxInt(arr []int) int {
-	biggest := -1 * (math.MinInt32 - 1)
+func maxByte(arr []int) int {
+	biggest := int(-1 * (math.MinInt8 - 1))
 	for _, num := range arr {
 		if num > biggest {
 			biggest = num
@@ -63,11 +63,12 @@ func rearrange(input []int, digits [10]int, place int) []int {
 }
 
 func initSlice() []int {
-	rand.Seed(int64(time.Now().Nanosecond()))
-	vals := []int{}
+	vals := make([]int, values)
 	for i := 0; i < values; i++ {
-		vals = append(vals, rand.Int())
+		temp, _ := rand.Int(rand.Reader, big.NewInt(1000))
+		vals[i] = int(temp.Int64())
 	}
+
 	return vals
 }
 

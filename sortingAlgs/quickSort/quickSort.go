@@ -1,14 +1,14 @@
 package main
 
 import (
+	"crypto/rand"
 	"fmt"
-	"math/rand"
 	"os"
 	"strconv"
 )
 
 var (
-	nums    []int
+	nums    []byte
 	numVals int = -1
 )
 
@@ -25,7 +25,7 @@ func main() {
 	}
 }
 
-func partition(arr []int, start int, end int) int {
+func partition(arr []byte, start int, end int) int {
 	pos := start - 1
 	part := arr[end]
 	for i := start; i < end; i++ {
@@ -39,7 +39,7 @@ func partition(arr []int, start int, end int) int {
 	return pos
 }
 
-func quickSort(arr []int, start int, end int) {
+func quickSort(arr []byte, start int, end int) {
 	if start < end {
 		pi := partition(arr, start, end)
 
@@ -48,10 +48,11 @@ func quickSort(arr []int, start int, end int) {
 	}
 }
 
-func initSlice() []int {
-	vals := []int{}
-	for i := 0; i < numVals; i++ {
-		vals = append(vals, rand.Int())
+func initSlice() []byte {
+	vals := make([]byte, numVals)
+	_, err := rand.Read(vals)
+	if err != nil {
+		panic(err)
 	}
 	return vals
 }
