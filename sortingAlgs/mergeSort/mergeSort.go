@@ -21,7 +21,9 @@ func main() {
 		numVals = 100
 	}
 	nums = initSlice()
-	nums = mergeSort(nums)
+	ms := make(chan []byte)
+	go mergeSort(nums, ms)
+	nums = <-ms
 	for _, value := range nums {
 		fmt.Printf("%d\n", value)
 	}
@@ -36,13 +38,16 @@ func initSlice() []byte {
 	return vals
 }
 
-func mergeSort(arr []byte) []byte {
+func mergeSort(arr []byte, ms chan []byte) {
 	if len(arr) <= 1 { //base case
-		return arr
+		ms <- arr
+		return
 	}
-
-	left := mergeSort(arr[:len(arr)/2])
-	right := mergeSort(arr[len(arr)/2:])
+	leftMS := make(chan []byte)
+	go mergeSort(arr[:len(arr)/2], leftMS)
+	rightMS := make(chan []byte)
+	go mergeSort(arr[len(arr)/2:], rightMS)
+	left, right := <-leftMS, <-rightMS
 	sortArr := make([]byte, len(arr))
 	lIndex, rIndex := 0, 0
 	for lIndex < len(left) && rIndex < len(right) {
@@ -65,5 +70,5 @@ func mergeSort(arr []byte) []byte {
 			sortArr[lIndex+rIndex] = right[rIndex]
 		}
 	}
-	return sortArr
+	ms <- sortArr
 }
