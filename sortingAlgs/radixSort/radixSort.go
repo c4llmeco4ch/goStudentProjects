@@ -30,7 +30,7 @@ func main() {
 	printSlice(nums)
 }
 
-func maxByte(arr []int) int {
+func maxInt(arr []int) int {
 	biggest := int(-1 * (math.MinInt8 - 1))
 	for _, num := range arr {
 		if num > biggest {

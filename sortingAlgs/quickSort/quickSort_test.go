@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/rand"
 	"fmt"
 	"strconv"
 	"testing"
@@ -29,6 +30,20 @@ func TestSortedSort(t *testing.T) {
 				val := arr[j]
 				fmt.Print(strconv.Itoa(int(val)))
 			}
+			t.Errorf("%d > %d", arr[i], arr[i+1])
+		}
+	}
+}
+
+func TestRandomSlice(t *testing.T) {
+	arr := make([]byte, 10000)
+	_, err := rand.Read(arr)
+	if err != nil {
+		panic(err)
+	}
+	quickSort(arr, 0, len(arr)-1)
+	for i := 0; i < len(arr)-1; i++ {
+		if arr[i+1] < arr[i] {
 			t.Errorf("%d > %d", arr[i], arr[i+1])
 		}
 	}
