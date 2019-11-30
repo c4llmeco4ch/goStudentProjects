@@ -18,12 +18,16 @@ func main() {
 	if len(os.Args) >= 2 {
 		numVals, _ = strconv.Atoi(os.Args[1])
 	} else {
-		numVals = 100
+		numVals = 2
 	}
 	nums = initSlice()
-	ms := make(chan []byte)
+	ms := make(chan byte)
 	go mergeSort(nums, ms)
-	nums = <-ms
+	pos := 0
+	for val := range ms {
+		nums[pos] = val
+		pos++
+	}
 	for _, value := range nums {
 		fmt.Printf("%d\n", value)
 	}
@@ -38,37 +42,41 @@ func initSlice() []byte {
 	return vals
 }
 
-func mergeSort(arr []byte, ms chan []byte) {
-	if len(arr) <= 1 { //base case
-		ms <- arr
+func mergeSort(arr []byte, ms chan byte) {
+	if len(arr) <= 1 {
+		if len(arr) == 1 { //base case
+			ms <- arr[0]
+		}
+		close(ms)
 		return
 	}
-	leftMS := make(chan []byte)
+	leftMS := make(chan byte)
 	go mergeSort(arr[:len(arr)/2], leftMS)
-	rightMS := make(chan []byte)
+	rightMS := make(chan byte)
 	go mergeSort(arr[len(arr)/2:], rightMS)
-	left, right := <-leftMS, <-rightMS
-	sortArr := make([]byte, len(arr))
-	lIndex, rIndex := 0, 0
-	for lIndex < len(left) && rIndex < len(right) {
-		leftLeast := left[lIndex] <= right[rIndex]
+	left, lOK := <-leftMS
+	right, rOK := <-rightMS
+	for lOK && rOK {
+		leftLeast := left <= right
 		if leftLeast {
-			sortArr[lIndex+rIndex] = left[lIndex]
-			lIndex++
+			ms <- left
+			left, lOK = <-leftMS
 		} else {
-			sortArr[lIndex+rIndex] = right[rIndex]
-			rIndex++
+			ms <- right
+			right, lOK = <-rightMS
 		}
 	}
-	if lIndex < len(left) {
-		for ; lIndex < len(left); lIndex++ {
-			sortArr[lIndex+rIndex] = left[lIndex]
+	if lOK {
+		ms <- left
+		for val := range leftMS {
+			ms <- val
 		}
 	}
-	if rIndex < len(right) {
-		for ; rIndex < len(right); rIndex++ {
-			sortArr[lIndex+rIndex] = right[rIndex]
+	if rOK {
+		ms <- right
+		for val := range rightMS {
+			ms <- val
 		}
 	}
-	ms <- sortArr
+	close(ms)
 }
