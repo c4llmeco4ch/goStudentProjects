@@ -34,7 +34,7 @@ func TestSortedSort(t *testing.T) {
 }
 
 func TestRandomSlice(t *testing.T) {
-	arr := make([]byte, 500)
+	arr := make([]byte, 10000)
 	_, err := rand.Read(arr)
 	if err != nil {
 		panic(err)
