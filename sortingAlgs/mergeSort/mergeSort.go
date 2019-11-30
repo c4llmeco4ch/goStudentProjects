@@ -18,7 +18,7 @@ func main() {
 	if len(os.Args) >= 2 {
 		numVals, _ = strconv.Atoi(os.Args[1])
 	} else {
-		numVals = 2
+		numVals = 100
 	}
 	nums = initSlice()
 	ms := make(chan byte)
@@ -63,7 +63,7 @@ func mergeSort(arr []byte, ms chan byte) {
 			left, lOK = <-leftMS
 		} else {
 			ms <- right
-			right, lOK = <-rightMS
+			right, rOK = <-rightMS
 		}
 	}
 	if lOK {
