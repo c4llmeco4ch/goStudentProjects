@@ -1,7 +1,11 @@
 //Package deckofcards provides utilities for creating and working with decks of cards for any number of games
 package deckofcards
 
+import "crypto/rand"
+
 const (
+	shuffleNum int = 7
+
 	//Suits A byte array representing the four suits
 	Suits = [4]byte{'H', 'S', 'D', 'C'}
 
@@ -30,4 +34,20 @@ func (c *Card) Flip() {
 //FillDeck Give deck d a new set of 52 playing cards
 func (d *Deck) FillDeck() {
 	temp := make([]Card, 52)
+	for pos, s := range Suits {
+		for v := 1; v <= MaxValue; v++ {
+			temp[(pos*13)+v] = Card{s, v, true}
+		}
+	}
+	d.Cards = temp
+}
+
+//Shuffle Given a deck of cards, shuffle it seven times
+func (d *Deck) Shuffle() {
+	for i := 0; i < shuffleNum; i++ {
+		for pos := range d.Cards {
+			temp, _ := rand.Int(rand.Reader, len(d))
+			d.Cards[pos], d.Cards[temp] = d.Cards[temp], d.Cards[pos]
+		}
+	}
 }
