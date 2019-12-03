@@ -51,3 +51,19 @@ func (d *Deck) Shuffle() {
 		}
 	}
 }
+
+func (d *Deck) Deal() Card, error {
+	if !d.IsEmpty {
+		dealt := d.Cards[0]
+		if len(d.Cards == 1) {
+			d.IsEmpty = true
+		} else {
+			d.Cards = d.Cards[1:]
+		}
+		return dealt, nil
+	} else {
+		return nil, error("Tried to deal from an empty deck.")
+	}
+
+
+}
