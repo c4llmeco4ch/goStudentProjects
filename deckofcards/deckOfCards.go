@@ -1,7 +1,10 @@
 //Package deckofcards provides utilities for creating and working with decks of cards for any number of games
 package deckofcards
 
-import "crypto/rand"
+import (
+	"crypto/rand"
+	"errors"
+)
 
 const (
 	shuffleNum int = 7
@@ -52,7 +55,8 @@ func (d *Deck) Shuffle() {
 	}
 }
 
-func (d *Deck) Deal() Card, error {
+//Deal Deal the "top" card from the deck
+func (d *Deck) Deal() (Card, error) {
 	if !d.IsEmpty {
 		dealt := d.Cards[0]
 		if len(d.Cards == 1) {
@@ -62,8 +66,7 @@ func (d *Deck) Deal() Card, error {
 		}
 		return dealt, nil
 	} else {
-		return nil, error("Tried to deal from an empty deck.")
+		return nil, errors.New("Tried to deal from an empty deck.")
 	}
-
 
 }
