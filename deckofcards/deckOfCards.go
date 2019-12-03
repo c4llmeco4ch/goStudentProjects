@@ -66,7 +66,7 @@ func (d *Deck) Deal() (Card, error) {
 		}
 		return dealt, nil
 	} else {
-		return nil, errors.New("Tried to deal from an empty deck.")
+		return nil, errors.New("Tried to deal from an empty deck")
 	}
 
 }
