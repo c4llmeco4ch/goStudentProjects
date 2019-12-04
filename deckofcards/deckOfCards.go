@@ -56,7 +56,7 @@ func (d Deck) String() string {
 	return s
 }
 
-//FillDeck Give deck d a new set of 52 playing cards
+//FillDeck Give deck d a new setfmt.Sprintf(s) of 52 playing cards
 func (d *Deck) FillDeck() {
 	temp := make([]Card, 52)
 	for pos, s := range Suits {
