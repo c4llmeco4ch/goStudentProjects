@@ -4,6 +4,7 @@ package deckofcards
 import (
 	"crypto/rand"
 	"errors"
+	"fmt"
 )
 
 const (
@@ -23,15 +24,36 @@ type Card struct {
 	IsFaceUp bool
 }
 
+//Flip Flip a given card object c
+func (c *Card) Flip() {
+	c.IsFaceUp = !c.IsFaceUp
+}
+
+//String Print the given card
+func (c Card) String() string {
+	if IsFaceUp {
+		return fmt.Sprintf("%d%s", c.Value, c.Suit)
+	}
+	return fmt.Sprintf("??")
+}
+
 //Deck A generic deck of cards
 type Deck struct {
 	Cards   []Card
 	IsEmpty bool
 }
 
-//Flip Flip a given card object c
-func (c *Card) Flip() {
-	c.IsFaceUp = !c.IsFaceUp
+//String Print all cards in the deck
+func (d Deck) String() string {
+	if d.IsEmpty {
+		return "[ ]"
+	}
+	s := "[|"
+	for _, c := range d.Cards {
+		s += (" %s |", c)
+	}
+	s += "]"
+	return s
 }
 
 //FillDeck Give deck d a new set of 52 playing cards
@@ -65,8 +87,6 @@ func (d *Deck) Deal() (Card, error) {
 			d.Cards = d.Cards[1:]
 		}
 		return dealt, nil
-	} else {
-		return nil, errors.New("Tried to deal from an empty deck")
 	}
-
+	return nil, errors.New("Tried to deal from an empty deck")
 }
