@@ -8,12 +8,12 @@ import (
 )
 
 var (
-	nums    []byte //The slice of numbers we want to sort
+	nums    []byte // The slice of numbers we want to sort
 	numVals int    = -1
 )
 
-//User can optionally add a parameter that determines how many random numbers will be sorted
-//If none are provided, 100 will be used
+// User can optionally add a parameter that determines how many random numbers will be sorted
+// If none are provided, 100 will be used
 func main() {
 	if len(os.Args) >= 2 {
 		numVals, _ = strconv.Atoi(os.Args[1])
@@ -44,7 +44,7 @@ func initSlice() []byte {
 
 func mergeSort(arr []byte, ms chan byte) {
 	if len(arr) <= 1 {
-		if len(arr) == 1 { //base case
+		if len(arr) == 1 { // base case
 			ms <- arr[0]
 		}
 		close(ms)
