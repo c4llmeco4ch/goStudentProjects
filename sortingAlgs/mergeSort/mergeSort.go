@@ -7,20 +7,14 @@ import (
 	"strconv"
 )
 
-var (
-	nums    []byte // The slice of numbers we want to sort
-	numVals int    = -1
-)
-
 // User can optionally add a parameter that determines how many random numbers will be sorted
 // If none are provided, 100 will be used
 func main() {
+	size := 100
 	if len(os.Args) >= 2 {
-		numVals, _ = strconv.Atoi(os.Args[1])
-	} else {
-		numVals = 100
+		size, _ = strconv.Atoi(os.Args[1])
 	}
-	nums = initSlice()
+	nums := initSlice(size)
 	ms := make(chan byte)
 	go mergeSort(nums, ms)
 	pos := 0
@@ -33,8 +27,8 @@ func main() {
 	}
 }
 
-func initSlice() []byte {
-	vals := make([]byte, numVals)
+func initSlice(length int) []byte {
+	vals := make([]byte, length)
 	_, err := rand.Read(vals)
 	if err != nil {
 		panic(err)
