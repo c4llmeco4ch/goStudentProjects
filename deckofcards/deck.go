@@ -17,26 +17,6 @@ const (
 	MaxValue int = 13
 )
 
-//Card A generic playing card
-type Card struct {
-	Suit     byte
-	Value    int
-	IsFaceUp bool
-}
-
-//Flip Flip a given card object c
-func (c *Card) Flip() {
-	c.IsFaceUp = !c.IsFaceUp
-}
-
-//String Print the given card
-func (c Card) String() string {
-	if IsFaceUp {
-		return fmt.Sprintf("%d%s", c.Value, c.Suit)
-	}
-	return fmt.Sprintf("??")
-}
-
 //Deck A generic deck of cards
 type Deck struct {
 	Cards   []Card
